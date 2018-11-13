@@ -7,20 +7,27 @@
     <meta name="description" content="More flexible access to ukrainian censorship database"/>
     <meta name="author" content="taras"/>
 
-    <title>Mailing List</title>
+    <title>Книги, прошедшие цензуру</title>
 </head>
 <body>
-    <table>
-        <tr>
-            <th>Автор</th>
-            <!--<th>PRICE</th>-->
-            <!--<th>IN STOCK</th>-->
-        </tr>
-        <!--<tr th:each="book : ${bookList}">-->
-            <!--<td th:text="${mail}">Dummy</td>-->
-            <!--<td th:text="${prod.price}">2.41</td>-->
-            <!--<td th:text="${prod.inStock}? #{true} : #{false}">yes</td>-->
-        </tr>
-    </table>
+<section>
+    <div>
+        <h4>Всего книг в базе: <strong><span th:text="${booksQuantity}"></span></strong></h4>
+        <p>Последнее обновление: <em><span th:text="${lastFileUpdate}"></span></em></p>
+    </div>
+</section>
+
+<!--<table>-->
+<!--<tr>-->
+<!--<th>Автор</th>-->
+<!--&lt;!&ndash;<th>PRICE</th>&ndash;&gt;-->
+<!--&lt;!&ndash;<th>IN STOCK</th>&ndash;&gt;-->
+<!--</tr>-->
+<!--&lt;!&ndash;<tr th:each="book : ${bookList}">&ndash;&gt;-->
+<!--&lt;!&ndash;<td th:text="${mail}">Dummy</td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td th:text="${prod.price}">2.41</td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td th:text="${prod.inStock}? #{true} : #{false}">yes</td>&ndash;&gt;-->
+<!--</tr>-->
+<!--</table>-->
 </body>
 </html>

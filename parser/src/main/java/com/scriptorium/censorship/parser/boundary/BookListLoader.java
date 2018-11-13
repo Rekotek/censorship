@@ -27,16 +27,6 @@ public final class BookListLoader {
     private BookListLoader() {
     }
 
-    //TODO: Move this to backend's Service Layer
-    public static boolean isNewFileOnServer(String urlAddress, long previousFileSize) {
-        long newFileSize = getFileSize(urlAddress);
-        if (newFileSize == 0) {
-            return false;
-        } else {
-            return newFileSize != previousFileSize;
-        }
-    }
-
     public static long getFileSize(String urlAddress) {
         try {
             URL urlObject = new URL(urlAddress);
