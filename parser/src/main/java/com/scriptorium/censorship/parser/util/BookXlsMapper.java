@@ -1,5 +1,6 @@
 package com.scriptorium.censorship.parser.util;
 
+import com.scriptorium.censorship.common.model.BookDto;
 import com.scriptorium.censorship.parser.model.BookInfo;
 import com.scriptorium.censorship.parser.model.BookInfo.BookInfoBuilder;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -16,21 +17,32 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import static com.scriptorium.censorship.common.util.Converters.convertStringValue;
+
 public class BookXlsMapper {
     private static final Logger log = LoggerFactory.getLogger(BookXlsMapper.class);
 
     private static final Map<Integer, Method> columnMap = new HashMap<>();
 
+    private static final int TRADE_COMPANY_COLUMN = 5;
+    private static final int RU_TITLE_COLUMN = 15;
+    private static final int ISBN_COLUMN = 16;
+    private static final int QUANTITY_COLUMN = 17;
+    private static final int AUTHOR_COLUMN = 19;
+    private static final int UA_TITLE_COLUMN = 21;
+    private static final int PUBLISHER_COLUMN = 22;
+    private static final int YEAR_COLUMN = 23;
+
     static {
         try {
-            columnMap.put(5, BookInfoBuilder.class.getMethod("tradeCompany", String.class));
-            columnMap.put(15, BookInfoBuilder.class.getMethod("ruTitle", String.class));
-            columnMap.put(16, BookInfoBuilder.class.getMethod("isbn", String.class));
-            columnMap.put(17, BookInfoBuilder.class.getMethod("quantity", String.class));
-            columnMap.put(19, BookInfoBuilder.class.getMethod("author", String.class));
-            columnMap.put(21, BookInfoBuilder.class.getMethod("uaTitle", String.class));
-            columnMap.put(22, BookInfoBuilder.class.getMethod("publisher", String.class));
-            columnMap.put(23, BookInfoBuilder.class.getMethod("yearOfPublish", String.class));
+            columnMap.put(TRADE_COMPANY_COLUMN, BookInfoBuilder.class.getMethod("tradeCompany", String.class));
+            columnMap.put(RU_TITLE_COLUMN, BookInfoBuilder.class.getMethod("ruTitle", String.class));
+            columnMap.put(ISBN_COLUMN, BookInfoBuilder.class.getMethod("isbn", String.class));
+            columnMap.put(QUANTITY_COLUMN, BookInfoBuilder.class.getMethod("quantity", String.class));
+            columnMap.put(AUTHOR_COLUMN, BookInfoBuilder.class.getMethod("author", String.class));
+            columnMap.put(UA_TITLE_COLUMN, BookInfoBuilder.class.getMethod("uaTitle", String.class));
+            columnMap.put(PUBLISHER_COLUMN, BookInfoBuilder.class.getMethod("publisher", String.class));
+            columnMap.put(YEAR_COLUMN, BookInfoBuilder.class.getMethod("yearOfPublish", String.class));
         } catch (NoSuchMethodException e) {
             log.error("Initialization error: {}", e.getMessage());
         }
@@ -56,14 +68,13 @@ public class BookXlsMapper {
                         method.invoke(bookInfoRowBuilder, "");
                     }
                 }
-            } catch (IllegalAccessException | InvocationTargetException ignored) {
-            }
+            } catch (IllegalAccessException | InvocationTargetException ignored) { }
         });
         return bookInfoRowBuilder.build();
     }
 
-    public static List<BookInfo> parseXlsStream(InputStream stream, int rowsToOmit) throws IOException {
-        List<BookInfo> resultList = new ArrayList<>(1024);
+    public static List<BookDto> parseXlsStream(InputStream stream, int rowsToOmit) throws IOException {
+        List<BookDto> resultList = new ArrayList<>(1024);
         try (HSSFWorkbook wb = new HSSFWorkbook(stream)) {
             log.debug("Begin to parse Workbook: Number of sheets: {}; Active sheet index: {}.", wb.getNumberOfSheets(), wb.getActiveSheetIndex());
             Sheet sheet = wb.getSheetAt(0);
@@ -77,10 +88,23 @@ public class BookXlsMapper {
             while (it.hasNext()) {
                 Row row = it.next();
                 BookInfo bookInfo = BookXlsMapper.createFromRow(row);
-                resultList.add(bookInfo);
+                resultList.add(createBookDto(bookInfo));
             }
         }
-        log.info("XLS stream was successfully parsed. Book quantity: {}", resultList.size());
+        log.info("XLS stream was successfully parsed. Books quantity: {}", resultList.size());
         return resultList;
+    }
+
+    private static BookDto createBookDto(BookInfo bookInfo) {
+        return BookDto.builder()
+                .tradeCompany(bookInfo.getTradeCompany())
+                .publisher(bookInfo.getPublisher())
+                .ruTitle(bookInfo.getRuTitle())
+                .isbn(bookInfo.getIsbn())
+                .quantity(convertStringValue(bookInfo.getQuantity()))
+                .author(bookInfo.getAuthor())
+                .uaTitle(bookInfo.getUaTitle())
+                .yearOfPublish(convertStringValue(bookInfo.getYearOfPublish()))
+                .build();
     }
 }
