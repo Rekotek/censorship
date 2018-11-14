@@ -1,7 +1,7 @@
 package com.scriptorium.censorship.frontend.service;
 
+import com.scriptorium.censorship.common.util.Converters;
 import com.scriptorium.censorship.frontend.repository.BookRepository;
-import com.scriptorium.censorship.frontend.util.DateTimeUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public final class AppSettingsService {
 
     public void loadProperties() {
         String propertyFile = dbPath + File.separator + APP_PROPERTIES_FILE;
-        LOG.debug("Load property from rile {}", propertyFile);
+        LOG.debug("Load property from file {}", propertyFile);
         Properties prop = new Properties();
         try (InputStream fis = new FileInputStream(propertyFile)) {
             prop.load(fis);
@@ -64,11 +64,12 @@ public final class AppSettingsService {
     void saveProperties(long newFileSize) {
         Properties prop = new Properties();
         try (OutputStream fos = new FileOutputStream(dbPath + File.separator + APP_PROPERTIES_FILE)) {
+            this.lastFileSize = newFileSize;
             prop.setProperty(KEY_LAST_FILE_SIZE, String.valueOf(newFileSize));
             LocalDateTime now = LocalDateTime.now();
-            prop.setProperty(KEY_LAST_DOWNLOAD_TIME, DateTimeUtil.toString(now));
+            this.lastDownloadTime = Converters.toString(now);
+            prop.setProperty(KEY_LAST_DOWNLOAD_TIME, this.lastDownloadTime);
             prop.store(fos, null);
-            this.lastFileSize = newFileSize;
         } catch (IOException e) {
             LOG.error("Cannot write properties file: {}", e.getMessage());
         }

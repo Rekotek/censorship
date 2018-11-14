@@ -21,6 +21,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @Service
 public final class BookService {
     private static final Logger LOG = getLogger(BookService.class);
+
     private final BookRepository bookRepository;
     private final AppSettingsService settingsService;
 
@@ -51,6 +52,9 @@ public final class BookService {
         return bookRepository.count();
     }
 
+    public List<Book> getInitialBookList() {
+        return bookRepository.getInitialBookList();
+    }
     private Book createBookEntity(BookDto bookDto) {
         Book book = new Book();
         book.setAuthor(bookDto.getAuthor());

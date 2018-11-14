@@ -12,6 +12,7 @@
     <name>Censorship</name>
 
     <modules>
+        <module>parent</module>
         <module>common</module>
         <module>parser</module>
         <module>frontend</module>

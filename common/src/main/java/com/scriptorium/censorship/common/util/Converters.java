@@ -1,5 +1,8 @@
 package com.scriptorium.censorship.common.util;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import static java.lang.Integer.parseInt;
 
 /**
@@ -7,9 +10,11 @@ import static java.lang.Integer.parseInt;
  */
 
 public final class Converters {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("d MMM yyyy HH:mm");
+
     private Converters() { }
 
-    public static int convertStringValue(String s) {
+    public static int toInt(String s) {
         int result;
         try {
             result = parseInt(s);
@@ -17,5 +22,9 @@ public final class Converters {
             result = 0;
         }
         return result;
+    }
+
+    public static String toString(LocalDateTime ldt) {
+        return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
     }
 }

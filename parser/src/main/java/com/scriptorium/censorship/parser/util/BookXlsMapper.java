@@ -17,7 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import static com.scriptorium.censorship.common.util.Converters.convertStringValue;
+import static com.scriptorium.censorship.common.util.Converters.toInt;
 
 public class BookXlsMapper {
     private static final Logger log = LoggerFactory.getLogger(BookXlsMapper.class);
@@ -101,10 +101,10 @@ public class BookXlsMapper {
                 .publisher(bookInfo.getPublisher())
                 .ruTitle(bookInfo.getRuTitle())
                 .isbn(bookInfo.getIsbn())
-                .quantity(convertStringValue(bookInfo.getQuantity()))
+                .quantity(toInt(bookInfo.getQuantity()))
                 .author(bookInfo.getAuthor())
                 .uaTitle(bookInfo.getUaTitle())
-                .yearOfPublish(convertStringValue(bookInfo.getYearOfPublish()))
+                .yearOfPublish(toInt(bookInfo.getYearOfPublish()))
                 .build();
     }
 }
