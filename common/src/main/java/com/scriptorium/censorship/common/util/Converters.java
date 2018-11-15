@@ -30,7 +30,7 @@ public final class Converters {
         return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
     }
 
-    public enum CHAR_FORM {
+    private enum CHAR_FORM {
         YI_Y,
         E_YE_EE_YO
     }
@@ -49,7 +49,7 @@ public final class Converters {
         ye_type.add('Ё');
     }
 
-    public static Set<String> getAllWordVariants(String word) {
+    public static Set<String> getAllVariants(String word) {
         String initialForm = word.toUpperCase();
         Set<String> resultSet = new HashSet<>();
         resultSet.add(initialForm);

@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.Set;
 
-import static com.scriptorium.censorship.common.util.Converters.getAllWordVariants;
+import static com.scriptorium.censorship.common.util.Converters.getAllVariants;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -18,14 +18,14 @@ public class ConvertersTest {
 
     @Test
     public void getSimpleWordWithoutVariants() {
-        Set<String> resultSet = getAllWordVariants(simpleWord);
+        Set<String> resultSet = getAllVariants(simpleWord);
         assertEquals(1, resultSet.size());
         assertTrue(resultSet.contains(simpleWord.toUpperCase())) ;
     }
 
     @Test
     public void getWordWith3Variants() {
-        Set<String> resultSet = getAllWordVariants(wordWith2Variants);
+        Set<String> resultSet = getAllVariants(wordWith2Variants);
         assertEquals(3, resultSet.size());
         assertTrue(resultSet.contains(wordWith2Variants.toUpperCase())) ;
         assertTrue(resultSet.contains("ПРІВО")) ;
@@ -33,7 +33,7 @@ public class ConvertersTest {
 
     @Test
     public void getTippingVariants() {
-        Set<String> resultSet = getAllWordVariants("Типпинг");
+        Set<String> resultSet = getAllVariants("Типпинг");
         assertTrue(resultSet.contains("ТИППИНГ")) ;
         assertTrue(resultSet.contains("ТІППИНГ")) ;
         assertTrue(resultSet.contains("ТІППІНГ")) ;
@@ -43,7 +43,7 @@ public class ConvertersTest {
 
     @Test
     public void getComplexWord_1() {
-        Set<String> resultSet = getAllWordVariants("Типпінговиче");
+        Set<String> resultSet = getAllVariants("Типпінговиче");
         assertEquals(108, resultSet.size());
         assertTrue(resultSet.contains("ТИППІНГОВИЧЕ")) ;
         assertTrue(resultSet.contains("ТИППИНГОВІЧЕ")) ;
