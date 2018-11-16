@@ -54,24 +54,11 @@ public final class Converters {
         Set<String> resultSet = new HashSet<>();
         resultSet.add(initialForm);
 
-        Map<Integer, CHAR_FORM> map = composePositions(initialForm);
+        Map<Integer, CHAR_FORM> initialMap = composePositions(initialForm);
 
-        generateWordSet(initialForm, map, resultSet);
+        generateWordSet(initialForm, initialMap, resultSet);
 
         return resultSet;
-    }
-
-    private static void generateWordSet(String currentWord, Map<Integer, CHAR_FORM> map, Set<String> resultSet) {
-        for (Map.Entry<Integer, CHAR_FORM> entry : map.entrySet()) {
-            Set<String> allFormsAtIndex = getAllFormsAtIndex(currentWord, entry.getKey(), entry.getValue());
-            resultSet.addAll(allFormsAtIndex);
-            Map<Integer, CHAR_FORM> newMap = new HashMap<>(map);
-            newMap.remove(entry.getKey());
-            if (newMap.isEmpty()) {
-                return;
-            }
-            allFormsAtIndex.forEach(s -> generateWordSet(s, newMap, resultSet));
-        }
     }
 
     private static Map<Integer, CHAR_FORM> composePositions(String initialWord) {
@@ -85,6 +72,19 @@ public final class Converters {
             }
         }
         return map;
+    }
+
+    private static void generateWordSet(String currentWord, Map<Integer, CHAR_FORM> map, Set<String> resultSet) {
+        for (Map.Entry<Integer, CHAR_FORM> entry : map.entrySet()) {
+            Set<String> allFormsAtIndex = getAllFormsAtIndex(currentWord, entry.getKey(), entry.getValue());
+            resultSet.addAll(allFormsAtIndex);
+            Map<Integer, CHAR_FORM> newMap = new HashMap<>(map);
+            newMap.remove(entry.getKey());
+            if (newMap.isEmpty()) {
+                return;
+            }
+            allFormsAtIndex.forEach(s -> generateWordSet(s, newMap, resultSet));
+        }
     }
 
     private static Set<String> getAllFormsAtIndex(String initialForm, int index, CHAR_FORM char_form) {
