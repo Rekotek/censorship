@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -16,6 +17,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @SpringBootApplication
+@EnableScheduling
 public class MainApplication implements CommandLineRunner {
     private static final Logger LOG = getLogger(MainApplication.class);
 
@@ -36,5 +38,6 @@ public class MainApplication implements CommandLineRunner {
             LOG.info("================== NEW DATABASE =================");
             bookService.fillDatabase();
         }
+        LOG.info("Application started...");
     }
 }

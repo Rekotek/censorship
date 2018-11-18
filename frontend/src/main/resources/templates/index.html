@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru">
-<head>
-    <div th:replace="fragments/main.html :: header-links"></div>
-    <title>Цензура в Украине</title>
+<head th:replace="fragments/main.html :: header-links">
 </head>
 <body>
 <div class="container">
@@ -15,20 +13,21 @@
     </div>
 
     <div class="row">
-        <div class="col-md-5">
-            <form class="form-horizontal">
+        <div class="col-md-10">
+            <form class="form-horizontal" action="/" method="get">
                 <div class="form-group">
                     <label for="searchBook" class="col-sm-4 control-label">Автор/Название</label>
-                    <div class="col-sm-8">
+                    <div class="col-md-8">
                         <input type="text" maxlength="80" class="form-control" id="searchBook"
-                               placeholder="Автор Название">
+                               placeholder="Содержательная часть Автора и/или Названия"
+                        th:text="${searchBook}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="publisher" class="col-sm-4 control-label">Издательство</label>
-                    <div class="col-sm-8">
+                    <div class="col-md-8">
                         <input type="text" maxlength="200" class="form-control" id="publisher"
-                               placeholder="Варианты написания через пробел">
+                               placeholder="Содержательная часть названия">
                     </div>
                 </div>
                 <div class="form-group">

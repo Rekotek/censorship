@@ -34,6 +34,7 @@ public final class BookService {
     }
 
     public void fillDatabase() throws CensorSiteNotWorkingException {
+        LOG.info("Run fillDatabase()");
         long newFileSize = getFileSize(urlAddress);
         if (newFileSize == 0) {
             LOG.error("Cannot load file.");
@@ -43,6 +44,7 @@ public final class BookService {
             List<BookDto> bookDtoList = BookListLoader.loadFileFromUrl(urlAddress);
             List<Book> books = bookDtoList.stream().map(this::createBookEntity).collect(toList());
             LOG.debug("Converted {} books into entities", books.size());
+            bookRepository.deleteAll();
             bookRepository.saveAll(books);
             settingsService.saveProperties(newFileSize);
         }
