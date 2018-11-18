@@ -4,9 +4,10 @@
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${CENSOR_APP_ROOT}/log/censorship.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>censorship-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${CENSOR_APP_ROOT}/log/censorship-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>1MB</maxFileSize>
             <totalSizeCap>100MB</totalSizeCap>
+            <maxHistory>10</maxHistory>
         </rollingPolicy>
         <encoder>
             <charset>UTF-8</charset>
@@ -23,7 +24,7 @@
 
     <logger name="com.scriptorium.censorship" level="debug"/>
 
-    <root level="warn">
+    <root level="info">
         <appender-ref ref="file"/>
         <appender-ref ref="console"/>
     </root>
