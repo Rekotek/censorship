@@ -18,5 +18,6 @@ public class BookInfo {
     private String author;
     private String uaTitle;
     private String yearOfPublish;
-
+    private String documentNum;
+    private String documentStartDate;
 }

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * Created by taras on 2018-11-12.
  */
@@ -22,4 +24,6 @@ public class BookDto {
     private String author;
     private String uaTitle;
     private int yearOfPublish;
+    private String documentNum;
+    private Date documentStartDate;
 }

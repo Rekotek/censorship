@@ -33,6 +33,14 @@ public final class BookService {
         this.settingsService = settingsService;
     }
 
+    private String prepareForSql(String in) {
+        return "%" + in.trim().toUpperCase()
+                .replaceAll("\\s{2,}", " ")
+                .replace(" ", "%")
+                .replaceAll("[И,І,Е,Э,Є,Ё,Ы]", "_")
+                 + "%";
+    }
+
     public void fillDatabase() throws CensorSiteNotWorkingException {
         LOG.info("Run fillDatabase()");
         long newFileSize = getFileSize(urlAddress);
@@ -54,19 +62,34 @@ public final class BookService {
         return bookRepository.count();
     }
 
-    public List<Book> getInitialBookList() {
-        return bookRepository.getInitialBookList();
+    public List<Book> searchBookByTitle(String title) {
+        String parsedTitle = prepareForSql(title);
+
+        return bookRepository.searchBookByTitle(parsedTitle);
     }
+
+    public List<Book> searchBookByTitleAndPublisher(String title, String publisher) {
+        String parsedTitle = prepareForSql(title);
+        String preparedPublisher = prepareForSql(publisher);
+
+        return bookRepository.searchBookByTitleAndPublisher(parsedTitle, preparedPublisher);
+    }
+
     private Book createBookEntity(BookDto bookDto) {
         Book book = new Book();
         book.setAuthor(bookDto.getAuthor());
+        book.setAuthorUpper(null == bookDto.getAuthor() ? "" : bookDto.getAuthor().toUpperCase());
         book.setIsbn(bookDto.getIsbn());
         book.setPublisher(bookDto.getPublisher());
+        book.setPublisherUpper(null == bookDto.getPublisher() ? "" : bookDto.getPublisher().toUpperCase());
         book.setQuantity(bookDto.getQuantity());
         book.setRuTitle(bookDto.getRuTitle());
+        book.setRuTitleUpper(null == bookDto.getRuTitle() ? "" : bookDto.getRuTitle().toUpperCase());
         book.setUaTitle(bookDto.getUaTitle());
         book.setTradeCompany(bookDto.getTradeCompany());
         book.setYearOfPublish(bookDto.getYearOfPublish());
+        book.setDocumentNum(bookDto.getDocumentNum());
+        book.setDocumentDate(bookDto.getDocumentStartDate());
         return book;
     }
 }
