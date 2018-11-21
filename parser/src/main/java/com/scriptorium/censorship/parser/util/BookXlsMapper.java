@@ -1,5 +1,6 @@
 package com.scriptorium.censorship.parser.util;
 
+import com.monitorjbl.xlsx.StreamingReader;
 import com.scriptorium.censorship.common.model.BookDto;
 import com.scriptorium.censorship.parser.model.BookInfo;
 import com.scriptorium.censorship.parser.model.BookInfo.BookInfoBuilder;
@@ -8,8 +9,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -74,10 +75,13 @@ public class BookXlsMapper {
         return bookInfoRowBuilder.build();
     }
 
-    public static List<BookDto> parseXlsStream(InputStream stream, int rowsToOmit) throws IOException {
+    public static List<BookDto> parseXlsFile(File file, int rowsToOmit) throws IOException {
         List<BookDto> resultList = new ArrayList<>(1024);
-        try (Workbook wb = WorkbookFactory.create(stream)) {
-            log.debug("Begin to parse Workbook: Number of sheets: {}; Active sheet index: {}.", wb.getNumberOfSheets(), wb.getActiveSheetIndex());
+        try (Workbook wb =  StreamingReader.builder()
+                .rowCacheSize(100)
+                .bufferSize(4096)
+                .open(file)) {
+            log.debug("Begin to parse Workbook: Number of sheets: {}", wb.getNumberOfSheets());
             Sheet sheet = wb.getSheetAt(0);
             Iterator<Row> it = sheet.iterator();
             while (it.hasNext()) {
@@ -113,7 +117,7 @@ public class BookXlsMapper {
 
     private static String removePossibleMarks(String in) {
         String result = in.startsWith("\"") ? in.substring(1) : in;
-        result = result.endsWith("\"") ? result.substring(0, result.length() - 2) : result;
+        result = result.endsWith("\"") ? result.substring(0, result.length() - 1) : result;
         return result;
     }
 

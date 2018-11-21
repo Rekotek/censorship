@@ -2,14 +2,14 @@ package com.scriptorium.censorship.parser.boundary;
 
 import com.scriptorium.censorship.common.model.BookDto;
 import com.scriptorium.censorship.parser.util.BookXlsMapper;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Collections;
 import java.util.List;
 
@@ -54,24 +54,26 @@ public final class BookListLoader {
     public static List<BookDto> loadFileFromUrl(String urlAddress, int rowsToOmit) {
         LOG.debug("Trying to get file from URL = {}", urlAddress);
         URL urlObject;
-        URLConnection urlConnection;
         try {
             urlObject = new URL(urlAddress);
-            urlConnection = urlObject.openConnection();
         } catch (MalformedURLException e) {
             LOG.error("The URL is not correct: {}", urlAddress);
             return Collections.emptyList();
-        } catch (IOException e) {
-            LOG.error("Error establish connection: {}", e.getMessage());
-            return Collections.emptyList();
         }
 
-        try (InputStream stream = urlConnection.getInputStream()) {
+        File tempFile;
+        try {
+            tempFile = File.createTempFile("loadedGoods-", "-tmp");
+            FileUtils.copyURLToFile(urlObject, tempFile, 5000, 120000);
+            LOG.info("Successfully save into file {}", tempFile.getName());
             List<BookDto> bookDtoList;
-            bookDtoList = BookXlsMapper.parseXlsStream(stream, rowsToOmit);
+            bookDtoList = BookXlsMapper.parseXlsFile(tempFile, rowsToOmit);
+            if (!tempFile.delete()) {
+                LOG.error("Cannot delete temporary file!");
+            }
             return bookDtoList;
         } catch (IOException e) {
-            LOG.error("Error loading file from site: {}", e.getMessage());
+            LOG.error("Error loading or parsing file: {}", e.getMessage());
             return Collections.emptyList();
         }
     }
