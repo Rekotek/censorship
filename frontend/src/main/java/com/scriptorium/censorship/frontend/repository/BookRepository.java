@@ -12,9 +12,6 @@ import java.util.List;
  */
 @Repository
 public interface BookRepository extends CrudRepository<Book, Long> {
-    @Query("select b from Book b where b.publisherUpper like '%СОФ_Я%' " +
-            "order by b.ruTitle, b.author, b.yearOfPublish desc")
-    List<Book> getInitialBookList();
 
     @Query("select b from Book b where " +
             "(( b.ruTitleUpper like ?1) or (b.authorUpper like ?1)) " +

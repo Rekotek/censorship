@@ -1,17 +1,20 @@
 package com.scriptorium.censorship.frontend.service;
 
 import com.scriptorium.censorship.common.model.BookDto;
+import com.scriptorium.censorship.common.model.ContentParams;
 import com.scriptorium.censorship.frontend.entity.Book;
 import com.scriptorium.censorship.frontend.exception.CensorSiteNotWorkingException;
 import com.scriptorium.censorship.frontend.repository.BookRepository;
 import com.scriptorium.censorship.parser.boundary.BookListLoader;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.scriptorium.censorship.parser.boundary.BookListLoader.getFileSize;
+import static com.scriptorium.censorship.parser.boundary.BookListLoader.loadContentParams;
 import static java.util.stream.Collectors.toList;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -19,22 +22,24 @@ import static org.slf4j.LoggerFactory.getLogger;
  * Created by taras on 2018-11-13.
  */
 @Service
-public final class BookService {
+public class BookService {
     private static final Logger LOG = getLogger(BookService.class);
 
     private final BookRepository bookRepository;
     private final AppSettingsService settingsService;
+    private final CacheManager cacheManager;
 
     @Value("${censorship.url}")
     private String urlAddress;
 
-    public BookService(BookRepository bookRepository, AppSettingsService settingsService) {
+    public BookService(BookRepository bookRepository, AppSettingsService settingsService, CacheManager cacheManager) {
         this.bookRepository = bookRepository;
         this.settingsService = settingsService;
+        this.cacheManager = cacheManager;
     }
 
     private String prepareForSql(String in) {
-        return "%" + in.trim().toUpperCase()
+        return "%" + in
                 .replaceAll("\\s{2,}", " ")
                 .replace(" ", "%")
                 .replaceAll("[И,І,Е,Э,Є,Ё,Ы]", "_")
@@ -43,18 +48,21 @@ public final class BookService {
 
     public void fillDatabase() throws CensorSiteNotWorkingException {
         LOG.info("Run fillDatabase()");
-        long newFileSize = getFileSize(urlAddress);
+
+        ContentParams newContentParams = loadContentParams(urlAddress);
+        long newFileSize = newContentParams.getFileSize();
         if (newFileSize == 0) {
             LOG.error("Cannot load file.");
-            throw new CensorSiteNotWorkingException("Невозможно получить файл.");
+            throw new CensorSiteNotWorkingException("Файл загрузился с нулевой длиной");
         }
-        if (newFileSize != settingsService.getLastFileSize()) {
-            List<BookDto> bookDtoList = BookListLoader.loadFileFromUrl(urlAddress);
-            List<Book> books = bookDtoList.stream().map(this::createBookEntity).collect(toList());
-            LOG.debug("Converted {} books into entities", books.size());
+        if (settingsService.shouldReloadData(newContentParams)) {
+            final List<BookDto> bookDtoList = BookListLoader.loadDataFromUrl(urlAddress, newContentParams.isXlsx());
+            final List<Book> books = bookDtoList.stream().map(this::createBookEntity).collect(toList());
+            LOG.info("Converted {} books into entities", books.size());
+            cacheManager.getCache("books").clear();
             bookRepository.deleteAll();
             bookRepository.saveAll(books);
-            settingsService.saveProperties(newFileSize);
+            settingsService.saveProperties(newContentParams);
         }
     }
 
@@ -64,13 +72,17 @@ public final class BookService {
 
     public List<Book> searchBookByTitle(String title) {
         String parsedTitle = prepareForSql(title);
+        LOG.info("For Title only: '{}'", title);
 
         return bookRepository.searchBookByTitle(parsedTitle);
     }
 
+    @Cacheable(value = "books", key = "{#title, #publisher}")
     public List<Book> searchBookByTitleAndPublisher(String title, String publisher) {
         String parsedTitle = prepareForSql(title);
         String preparedPublisher = prepareForSql(publisher);
+
+        LOG.debug("For Title: '{}' and Publisher: '{}'", title, publisher);
 
         return bookRepository.searchBookByTitleAndPublisher(parsedTitle, preparedPublisher);
     }

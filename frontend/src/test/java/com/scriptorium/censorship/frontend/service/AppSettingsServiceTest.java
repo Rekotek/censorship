@@ -13,7 +13,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class AppSettingsServiceTest {
-    private static final long LAST_SIZE = 11385856;
 
     @Autowired
     private AppSettingsService settingsService;

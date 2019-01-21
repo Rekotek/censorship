@@ -5,12 +5,15 @@ import com.scriptorium.censorship.common.model.BookDto;
 import com.scriptorium.censorship.parser.model.BookInfo;
 import com.scriptorium.censorship.parser.model.BookInfo.BookInfoBuilder;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -70,34 +73,51 @@ public class BookXlsMapper {
                         method.invoke(bookInfoRowBuilder, "");
                     }
                 }
-            } catch (IllegalAccessException | InvocationTargetException ignored) { }
+            } catch (IllegalAccessException | InvocationTargetException ignored) {
+            }
         });
         return bookInfoRowBuilder.build();
     }
 
-    public static List<BookDto> parseXlsFile(File file, int rowsToOmit) throws IOException {
-        List<BookDto> resultList = new ArrayList<>(1024);
-        try (Workbook wb =  StreamingReader.builder()
+    public static List<BookDto> parseXlsxFile(File file, int rowsToOmit) throws IOException {
+        List<BookDto> resultList = new ArrayList<>(24000);
+
+        try (Workbook wb = StreamingReader.builder()
                 .rowCacheSize(100)
                 .bufferSize(4096)
                 .open(file)) {
-            log.debug("Begin to parse Workbook: Number of sheets: {}", wb.getNumberOfSheets());
-            Sheet sheet = wb.getSheetAt(0);
-            Iterator<Row> it = sheet.iterator();
-            while (it.hasNext()) {
-                Row row = it.next();
-                if (row.getRowNum() == rowsToOmit) {
-                    break;
-                }
-            }
-            while (it.hasNext()) {
-                Row row = it.next();
-                BookInfo bookInfo = BookXlsMapper.createFromRow(row);
-                resultList.add(createBookDto(bookInfo));
-            }
+            extractData(wb, rowsToOmit, resultList);
         }
         log.info("XLS stream was successfully parsed. Books quantity: {}", resultList.size());
         return resultList;
+    }
+
+    public static List<BookDto> parseXlsFile(File file, int rowsToOmit) throws IOException {
+        List<BookDto> resultList = new ArrayList<>(24000);
+
+        try (InputStream is = new FileInputStream(file); Workbook wb = new HSSFWorkbook(is)) {
+            extractData(wb, rowsToOmit, resultList);
+        }
+
+        log.info("XLS stream was successfully parsed. Books quantity: {}", resultList.size());
+        return resultList;
+    }
+
+    private static void extractData(Workbook wb, int rowsToOmit, List<BookDto> resultList) {
+        log.debug("Begin to parse Workbook: Number of sheets: {}", wb.getNumberOfSheets());
+        Sheet sheet = wb.getSheetAt(0);
+        Iterator<Row> it = sheet.iterator();
+        while (it.hasNext()) {
+            Row row = it.next();
+            if (row.getRowNum() == rowsToOmit) {
+                break;
+            }
+        }
+        while (it.hasNext()) {
+            Row row = it.next();
+            BookInfo bookInfo = BookXlsMapper.createFromRow(row);
+            resultList.add(createBookDto(bookInfo));
+        }
     }
 
     private static BookDto createBookDto(BookInfo bookInfo) {

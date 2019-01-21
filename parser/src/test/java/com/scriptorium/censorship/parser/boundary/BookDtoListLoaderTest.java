@@ -15,7 +15,7 @@ public class BookDtoListLoaderTest {
 
     @Test
     public void loadFileFromUrl() {
-        List<BookDto> bookDtoList = BookListLoader.loadFileFromUrl(URL_CENSOR_FILE);
+        List<BookDto> bookDtoList = BookListLoader.loadDataFromUrl(URL_CENSOR_FILE, false);
         Assert.assertTrue(bookDtoList.size() > 0);
         System.out.println("==============First 3 books=============");
         System.out.println(bookDtoList.get(0));
@@ -30,7 +30,7 @@ public class BookDtoListLoaderTest {
 
     @Test
     public void getFileSize() {
-        long fileSize = BookListLoader.getFileSize(URL_CENSOR_FILE);
+        long fileSize = BookListLoader.loadContentParams(URL_CENSOR_FILE).getFileSize();
         Assert.assertTrue(fileSize > 0);
         System.out.println(fileSize);
     }

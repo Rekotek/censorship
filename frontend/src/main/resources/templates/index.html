@@ -7,14 +7,16 @@
 
     <div class="header header-panel">
         <div class="row text-right">
-            <p>Книг в базе: <strong th:text="${booksQuantity}"></strong>
-                <small>(обновленние от <span th:text="${lastFileUpdate}"></span>)</small>
-            </p>
+            <div class="col-md-8 col-md-offset-2">
+                <p>Книг в базе: <strong th:text="${booksQuantity}"></strong>
+                    <small>(<span th:text="${lastFileUpdate}"></span>)</small>
+                </p>
+            </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-10">
-            <form class="form-horizontal" action="/" method="post">
+            <form class="form-horizontal" action="/" method="get">
                 <div class="form-group">
                     <label for="searchBook" class="col-sm-4 control-label">Автор/Название</label>
                     <div class="col-md-8">
@@ -43,11 +45,11 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="alert alert-warning" th:if="${error != null}"><span class="error" th:text="${error}"></span></div>
+    <!--<div class="row">-->
+        <!--<div class="alert alert-warning" th:if="${error != null}"><span class="error" th:text="${error}"></span></div>-->
 
-        <span th:if="${error == null}">Найдено книг: <strong th:text="${bookList.size()}">24</strong></span>
-    </div>
+        <!--<span th:if="${error == null}">Найдено книг: <strong th:text="${bookList.size()}">24</strong></span>-->
+    <!--</div>-->
 
     <div class="row">
         <table class="table table-striped table-hover table-bordered">

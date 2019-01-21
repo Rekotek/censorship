@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -18,6 +19,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @SpringBootApplication
 @EnableScheduling
+@EnableCaching
 public class MainApplication implements CommandLineRunner {
     private static final Logger LOG = getLogger(MainApplication.class);
 

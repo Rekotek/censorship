@@ -13,6 +13,7 @@
 
     <properties>
         <spring-boot.version>2.1.0.RELEASE</spring-boot.version>
+        <ehcache.version>3.6.1</ehcache.version>
     </properties>
 
     <artifactId>frontend</artifactId>
@@ -37,6 +38,19 @@
             <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>${ehcache.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
         <!-- DATA LAYER -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
