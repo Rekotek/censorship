@@ -70,7 +70,7 @@ public final class BookListLoader {
     }
 
     public static List<BookDto> loadDataFromUrl(String urlAddress, int rowsToOmit, boolean expectXlsx) {
-        LOG.debug("Trying to get file from URL = {}", urlAddress);
+        LOG.debug("Trying to get file from censor's site");
         URL urlObject;
         try {
             urlObject = new URL(urlAddress);
@@ -83,7 +83,7 @@ public final class BookListLoader {
         try {
             tempFile = File.createTempFile("loadedGoods-", "-tmp");
             FileUtils.copyURLToFile(urlObject, tempFile, 5000, 120000);
-            LOG.info("Successfully save into file {}", tempFile.getName());
+            LOG.info("File successfully saved, type is {}", expectXlsx ? "xlsx" : "xls");
             List<BookDto> bookDtoList;
             if (expectXlsx) {
                 bookDtoList = BookXlsMapper.parseXlsxFile(tempFile, rowsToOmit);

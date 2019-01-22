@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="fragments/main.html :: header-links">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                <button class="btn btn-sm btn-primary"
+                        onclick="window.location.href='/'">Back
+                </button>
+            </div>
+
+            <div class="col-md-2 col-md-offset-6">
+                <form class="form-inline" action="/logs" method="get">
+                    <input type="number" min="10" max="50"
+                           class="form-control"
+                           name="lines" id="lines"
+                           th:value="${lines}"/>
+                    <button class="btn btn-sm btn-info">Show</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="log">
+                <p th:each="line : ${log}">
+                    <span th:text="${line}"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

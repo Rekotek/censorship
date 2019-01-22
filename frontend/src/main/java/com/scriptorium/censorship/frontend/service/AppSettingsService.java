@@ -49,7 +49,7 @@ public final class AppSettingsService {
 
     public void loadProperties() {
         String propertyFile = dbPath + File.separator + APP_PROPERTIES_FILE;
-        LOG.info("Load properties from {}", propertyFile);
+        LOG.info("Trying to load properties from {}", propertyFile);
         Properties prop = new Properties();
         try (InputStream fis = new FileInputStream(propertyFile)) {
             prop.load(fis);

@@ -1,3 +1,15 @@
 html, body {
     margin: 2px;
+    background-color: #f1f1f1;
+}
+
+.log {
+    font-family: Consolas, Lucida Console, monospace;
+    font-weight: normal;
+    font-size: smaller;
+    background-color: #333333;
+    text-align: left;
+    color: #f1f1f1;
+    padding: 5px;
+    margin-top: 10px;
 }

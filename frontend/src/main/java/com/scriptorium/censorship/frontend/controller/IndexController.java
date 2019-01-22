@@ -47,7 +47,7 @@ public class IndexController {
                              HttpServletRequest request,
                              Model model) {
         List<Book> bookList;
-        LOG.debug("GET from IP <{}> with '{}', publisher '{}'", request.getRemoteAddr(), searchBook, publisher);
+        LOG.debug("From <{}> with '{}', publisher '{}'", request.getRemoteAddr(), searchBook, publisher);
         if (StringUtils.isBlank(publisher)) {
             if (StringUtils.isBlank(searchBook)) {
                 publisher = "СОФИЯ";

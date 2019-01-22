@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -39,7 +40,8 @@ public class BookService {
     }
 
     private String prepareForSql(String in) {
-        return "%" + in
+        return (StringUtils.isEmpty(in)) ? "%" :
+                "%" + in
                 .replaceAll("\\s{2,}", " ")
                 .replace(" ", "%")
                 .replaceAll("[И,І,Е,Э,Є,Ё,Ы]", "_")
@@ -47,7 +49,7 @@ public class BookService {
     }
 
     public void fillDatabase() throws CensorSiteNotWorkingException {
-        LOG.info("Run fillDatabase()");
+        LOG.info(">>> Run fillDatabase() >>>");
 
         ContentParams newContentParams = loadContentParams(urlAddress);
         long newFileSize = newContentParams.getFileSize();
@@ -72,7 +74,7 @@ public class BookService {
 
     public List<Book> searchBookByTitle(String title) {
         String parsedTitle = prepareForSql(title);
-        LOG.info("For Title only: '{}'", title);
+        LOG.info("Parsed Title only: '{}'", parsedTitle);
 
         return bookRepository.searchBookByTitle(parsedTitle);
     }
@@ -82,7 +84,7 @@ public class BookService {
         String parsedTitle = prepareForSql(title);
         String preparedPublisher = prepareForSql(publisher);
 
-        LOG.debug("For Title: '{}' and Publisher: '{}'", title, publisher);
+        LOG.debug("Parsed Title: '{}' and Publisher: '{}'", parsedTitle, preparedPublisher);
 
         return bookRepository.searchBookByTitleAndPublisher(parsedTitle, preparedPublisher);
     }
