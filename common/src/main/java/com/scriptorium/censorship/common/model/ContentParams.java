@@ -23,7 +23,7 @@ public class ContentParams {
         if (o == null || getClass() != o.getClass()) return false;
         ContentParams that = (ContentParams) o;
         return fileSize == that.fileSize &&
-                lastModified == that.lastModified;
+                xlsx == that.xlsx;
     }
 
     @Override
