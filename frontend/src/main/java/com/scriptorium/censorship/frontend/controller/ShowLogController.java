@@ -17,12 +17,19 @@ public class ShowLogController {
     }
 
     @GetMapping("/logs")
-    public String showLogInfo(@RequestParam(value = "lines", required = false) Integer lines, Model model) {
-        if (null == lines) {
+    public String showLogInfo(@RequestParam(value = "lines", required = false) String linesInput, Model model) {
+        int lines;
+        if (null == linesInput) {
             lines = 10;
-        }
-        if (lines > LogReaderService.MAX_LINES) {
-            lines = LogReaderService.MAX_LINES;
+        } else {
+            try {
+                lines = Integer.valueOf(linesInput);
+            } catch (NumberFormatException e) {
+                return "redirect:/logs?lines=10";
+            }
+            if (lines > LogReaderService.MAX_LINES) {
+                lines = LogReaderService.MAX_LINES;
+            }
         }
 
         List<String> logList = logReaderService.tailLog(lines);
