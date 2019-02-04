@@ -27,14 +27,14 @@ public class BookXlsMapper {
 
     private static final int DOCUMENT_NUM_COLUMN = 1;
     private static final int DOCUMENT_START_DATE = 2;
-    private static final int TRADE_COMPANY_COLUMN = 5;
-    private static final int RU_TITLE_COLUMN = 15;
-    private static final int ISBN_COLUMN = 16;
-    private static final int QUANTITY_COLUMN = 17;
-    private static final int AUTHOR_COLUMN = 19;
-    private static final int UA_TITLE_COLUMN = 21;
-    private static final int PUBLISHER_COLUMN = 22;
-    private static final int YEAR_COLUMN = 23;
+    private static final int TRADE_COMPANY_COLUMN = 4;
+    private static final int RU_TITLE_COLUMN = 13;
+    private static final int ISBN_COLUMN = 14;
+    private static final int QUANTITY_COLUMN = 15;
+    private static final int AUTHOR_COLUMN = 17;
+    private static final int UA_TITLE_COLUMN = 19;
+    private static final int PUBLISHER_COLUMN = 20;
+    private static final int YEAR_COLUMN = 21;
 
     static {
         try {
@@ -93,7 +93,7 @@ public class BookXlsMapper {
     }
 
     public static List<BookDto> parseXlsFile(File file, int rowsToOmit) throws IOException {
-        List<BookDto> resultList = new ArrayList<>(24000);
+        List<BookDto> resultList = new ArrayList<>(25000);
 
         try (InputStream is = new FileInputStream(file); Workbook wb = new HSSFWorkbook(is)) {
             extractData(wb, rowsToOmit, resultList);
