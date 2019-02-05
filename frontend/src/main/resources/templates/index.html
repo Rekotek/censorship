@@ -45,21 +45,22 @@
         </div>
     </div>
 
-    <!--<div class="row">-->
+    <div class="row">
         <!--<div class="alert alert-warning" th:if="${error != null}"><span class="error" th:text="${error}"></span></div>-->
 
         <!--<span th:if="${error == null}">Найдено книг: <strong th:text="${bookList.size()}">24</strong></span>-->
-    <!--</div>-->
+        <span>Найдено книг: <strong th:text="${bookList.size()}">24</strong></span>
+    </div>
 
     <div class="row">
         <table class="table table-striped table-hover table-bordered">
             <thead>
             <tr>
-                <th class="text-center" width="50%">Книга</th>
+                <th class="text-center" width="45%">Книга</th>
                 <th class="text-center" width="60px">Год</th>
                 <th class="text-center" width="20%">Издательство</th>
                 <th class="text-center">Перевозчик</th>
-                <th class="text-center" width="80px">№ разр</th>
+                <th class="text-center" width="70px">№ разр</th>
                 <th class="text-center" width="100px">Дата</th>
             </tr>
             </thead>
@@ -77,8 +78,8 @@
                     </div>
                 </td>
                 <td th:text="${book.yearOfPublish}" class="text-center">Dummy</td>
-                <td th:text="${book.publisher}">Dummy</td>
-                <td th:text="${book.tradeCompany}" class="text-center">Dummy</td>
+                <td th:text="${#strings.abbreviate(book.publisher, 54)}">Dummy</td>
+                <td th:text="${#strings.abbreviate(book.tradeCompany, 45)}" class="text-center">Dummy</td>
                 <td th:text="${book.documentNum}" class="text-center">Dummy</td>
                 <td th:text="${#dates.format(book.documentDate, 'dd MMM yyyy')}" class="text-center">Dummy</td>
             </tr>
