@@ -20,6 +20,7 @@ public class BookDto {
     private String publisher;
     private String ruTitle;
     private String isbn;
+    private String isbnShort;
     private int quantity;
     private String author;
     private String uaTitle;

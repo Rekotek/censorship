@@ -1,6 +1,15 @@
 html, body {
     margin: 2px;
     background-color: #f1f1f1;
+    font-size: small;
+}
+
+form {
+    font-size: small;
+}
+
+.hide {
+    display:none;
 }
 
 .log {
@@ -12,4 +21,8 @@ html, body {
     color: #f1f1f1;
     padding: 5px;
     margin-top: 10px;
+}
+
+input {
+    width: 30px; !important;
 }

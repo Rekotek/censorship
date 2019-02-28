@@ -3,65 +3,55 @@
 <head th:replace="fragments/main.html :: header-links">
 </head>
 <body>
+<script type="text/javascript" src="/js/main.js"></script>
 <div class="container">
 
-    <div class="header header-panel">
-        <div class="row text-right">
-            <div class="col-md-8 col-md-offset-2">
-                <p>Книг в базе: <strong th:text="${booksQuantity}"></strong>
-                    <small>(<span th:text="${lastFileUpdate}"></span>)</small>
-                </p>
-            </div>
+    <div class="row justify-content-center">
+        <div class="col-5">
+            <p>Всего книг в базе: <strong th:text="${booksQuantity}"></strong>
+                <small>(<span th:text="${lastFileUpdate}"></span>)</small>
+            </p>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-10">
-            <form class="form-horizontal" action="/" method="get">
-                <div class="form-group">
-                    <label for="searchBook" class="col-sm-4 control-label">Автор/Название</label>
-                    <div class="col-md-8">
+
+    <div class="row justify-content-center">
+            <form action="/" method="get">
+                <div class="form-inline">
                         <input type="text" maxlength="80" class="form-control" id="searchBook"
                                name="searchBook"
-                               placeholder="Существенная часть из Автора и/или Названия"
                                autofocus
+                               placeholder="Автор/Название"
                                th:value="${searchBook}"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="publisher" class="col-sm-4 control-label">Издательство</label>
-                    <div class="col-md-8">
-                        <input type="text" maxlength="200" class="form-control" id="publisher"
-                               name="publisher"
-                               placeholder="Существенная часть названия"
-                               th:value="${publisher}"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-4 col-sm-8">
-                        <button type="submit" class="btn btn-primary">Искать</button>
-                    </div>
+
+                        <div class="ml-2">
+                            <input type="text" maxlength="10" class="form-control" id="publisher"
+                                   name="publisher"
+                                   placeholder="Издательство"
+                                   th:width="30px"
+                                   th:value="${publisher}"/>
+                        </div>
+
+                    <button type="submit" class="btn btn-primary ml-2">Искать</button>
                 </div>
             </form>
+        <div class="ml-4 mt-2">
+            <span>Найдено книг: <strong th:text="${bookList.size()}">24</strong></span>
         </div>
     </div>
 
-    <div class="row">
-        <!--<div class="alert alert-warning" th:if="${error != null}"><span class="error" th:text="${error}"></span></div>-->
-
-        <!--<span th:if="${error == null}">Найдено книг: <strong th:text="${bookList.size()}">24</strong></span>-->
-        <span>Найдено книг: <strong th:text="${bookList.size()}">24</strong></span>
-    </div>
+    <div class="row"><p></p></div>
 
     <div class="row">
-        <table class="table table-striped table-hover table-bordered">
+        <table class="table table-striped table-hover table-bordered" id="datatable">
             <thead>
             <tr>
-                <th class="text-center" width="45%">Книга</th>
-                <th class="text-center" width="60px">Год</th>
-                <th class="text-center" width="20%">Издательство</th>
+                <th class="text-center" width="35%">Книга</th>
+                <th class="text-center" width="25px">Год</th>
+                <th class="text-center" width="15%">Издательство</th>
                 <th class="text-center">Перевозчик</th>
-                <th class="text-center" width="70px">№ разр</th>
-                <th class="text-center" width="100px">Дата</th>
+                <th class="text-center" width="115px">ISBN</th>
+                <th class="text-center" width="10px">№</th>
+                <th class="text-center" width="60px">Дата</th>
             </tr>
             </thead>
             <tbody>
@@ -69,22 +59,25 @@
                 <td><span th:text="${book.ruTitle}"></span><br/>
                     <div class="row">
                         <div class="col-md-8"><strong th:text="${book.author}"></strong></div>
-                        <div class="col-md-4">
-                            <small>(
-                                <span th:text="${book.isbn}"></span>
-                                )
-                            </small>
-                        </div>
                     </div>
                 </td>
                 <td th:text="${book.yearOfPublish}" class="text-center">Dummy</td>
-                <td th:text="${#strings.abbreviate(book.publisher, 54)}">Dummy</td>
-                <td th:text="${#strings.abbreviate(book.tradeCompany, 45)}" class="text-center">Dummy</td>
+                <td th:text="${#strings.abbreviate(book.publisher, 34)}">Dummy</td>
+                <td th:text="${#strings.abbreviate(#strings.substring(book.tradeCompany, 12), 35)}" class="text-center">
+                    Dummy
+                </td>
+                <td th:text="${book.isbn}" class="text-center">Dummy</td>
                 <td th:text="${book.documentNum}" class="text-center">Dummy</td>
-                <td th:text="${#dates.format(book.documentDate, 'dd MMM yyyy')}" class="text-center">Dummy</td>
+                <td class="text-center"><span class="hide"
+                                              th:text="${#dates.format(book.documentDate, 'yyyyMMdd')}"></span><span
+                        th:text="${#dates.format(book.documentDate, 'dd MMM yyyy')}"></span></td>
             </tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="row">
+        <p></p>
     </div>
 
     <div class="row">
@@ -97,6 +90,9 @@
 
             Цензура заборонена.
         </small>
+    </div>
+    <div class="row">
+        <p></p>
     </div>
 </div>
 </body>
