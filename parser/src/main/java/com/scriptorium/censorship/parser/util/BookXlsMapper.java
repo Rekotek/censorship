@@ -126,6 +126,7 @@ public class BookXlsMapper {
                 .publisher(replaceLetterC(bookInfo.getPublisher()))
                 .ruTitle(removePossibleMarks(replaceLetterC(bookInfo.getRuTitle())))
                 .isbn(bookInfo.getIsbn())
+                .isbnShort(bookInfo.getIsbn().replace("-", ""))
                 .quantity(toInt(bookInfo.getQuantity()))
                 .author(replaceLetterC(bookInfo.getAuthor()))
                 .uaTitle(removePossibleMarks(replaceLetterC(bookInfo.getUaTitle())))

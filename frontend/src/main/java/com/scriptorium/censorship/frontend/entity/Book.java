@@ -39,6 +39,8 @@ public class Book {
 
     private String isbn;
 
+    private String isbnShort;
+
     private int quantity;
 
     @Column(length = MAX_VARCHAR)

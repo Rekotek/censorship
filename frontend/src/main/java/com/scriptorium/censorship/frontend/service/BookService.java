@@ -76,7 +76,12 @@ public class BookService {
         String parsedTitle = prepareForSql(title);
         LOG.info("Parsed Title only: '{}'", parsedTitle);
 
-        return bookRepository.searchBookByTitle(parsedTitle);
+        List<Book> bookList = bookRepository.searchByTitle(parsedTitle);
+        if (bookList.size() == 0) {
+            bookList = bookRepository.findByIsbnShortLikeOrderByRuTitleAscRuTitleAscYearOfPublishDesc(
+                    parsedTitle.replace("-", ""));
+        }
+        return bookList;
     }
 
     @Cacheable(value = "books", key = "{#title, #publisher}")
@@ -86,7 +91,13 @@ public class BookService {
 
         LOG.debug("Parsed Title: '{}' and Publisher: '{}'", parsedTitle, preparedPublisher);
 
-        return bookRepository.searchBookByTitleAndPublisher(parsedTitle, preparedPublisher);
+        List<Book> bookList = bookRepository.searchByTitleAndPublisher(parsedTitle, preparedPublisher);
+        if (bookList.size() == 0) {
+            bookList = bookRepository.findByIsbnShortLikeAndPublisherLike(
+                    parsedTitle.replace("-", ""),
+                    preparedPublisher);
+        }
+        return bookList;
     }
 
     private Book createBookEntity(BookDto bookDto) {
@@ -94,6 +105,7 @@ public class BookService {
         book.setAuthor(bookDto.getAuthor());
         book.setAuthorUpper(null == bookDto.getAuthor() ? "" : bookDto.getAuthor().toUpperCase());
         book.setIsbn(bookDto.getIsbn());
+        book.setIsbnShort(bookDto.getIsbnShort());
         book.setPublisher(bookDto.getPublisher());
         book.setPublisherUpper(null == bookDto.getPublisher() ? "" : bookDto.getPublisher().toUpperCase());
         book.setQuantity(bookDto.getQuantity());

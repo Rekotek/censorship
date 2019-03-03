@@ -20,7 +20,7 @@
                         <input type="text" maxlength="80" class="form-control" id="searchBook"
                                name="searchBook"
                                autofocus
-                               placeholder="Автор/Название"
+                               placeholder="Автор/Название/хвост ISBN"
                                th:value="${searchBook}"/>
 
                         <div class="ml-2">
@@ -36,6 +36,9 @@
             </form>
         <div class="ml-4 mt-2">
             <span>Найдено книг: <strong th:text="${bookList.size()}">24</strong></span>
+        </div>
+        <div class="ml-4 mt-2">
+            <a href="/download.jsp">Загрузить XLS</a>
         </div>
     </div>
 
