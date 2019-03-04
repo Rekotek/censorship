@@ -16,6 +16,7 @@ public class ContentParams {
     private long fileSize;
     private LocalDateTime lastModified;
     private boolean xlsx;
+    private int quantity;
 
     @Override
     public boolean equals(Object o) {
@@ -23,11 +24,12 @@ public class ContentParams {
         if (o == null || getClass() != o.getClass()) return false;
         ContentParams that = (ContentParams) o;
         return fileSize == that.fileSize &&
-                xlsx == that.xlsx;
+                xlsx == that.xlsx &&
+                quantity == that.quantity;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fileSize, lastModified);
+        return Objects.hash(fileSize, lastModified, quantity);
     }
 }

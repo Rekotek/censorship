@@ -58,13 +58,14 @@ public class BookService {
             throw new CensorSiteNotWorkingException("Файл загрузился с нулевой длиной");
         }
         if (settingsService.shouldReloadData(newContentParams)) {
-            final List<BookDto> bookDtoList = BookListLoader.loadDataFromUrl(urlAddress, newContentParams.isXlsx());
+            final List<BookDto> bookDtoList = BookListLoader.loadDataFromUrl(urlAddress, newContentParams.isXlsx(), settingsService.getLastQuantity());
             final List<Book> books = bookDtoList.stream().map(this::createBookEntity).collect(toList());
             LOG.info("Converted {} books into entities", books.size());
+            newContentParams.setQuantity(books.size());
             cacheManager.getCache("books").clear();
             bookRepository.deleteAll();
             bookRepository.saveAll(books);
-            settingsService.saveProperties(newContentParams);
+            settingsService.applyProperties(newContentParams);
         }
     }
 

@@ -65,11 +65,11 @@ public final class BookListLoader {
         }
     }
 
-    public static List<BookDto> loadDataFromUrl(String urlAddress, boolean expectXlsx) {
-        return loadDataFromUrl(urlAddress, ROWS_TO_OMIT, expectXlsx);
+    public static List<BookDto> loadDataFromUrl(String urlAddress, boolean expectXlsx, int oldBookQuantity) {
+        return loadDataFromUrl(urlAddress, ROWS_TO_OMIT, expectXlsx, oldBookQuantity);
     }
 
-    public static List<BookDto> loadDataFromUrl(String urlAddress, int rowsToOmit, boolean expectXlsx) {
+    public static List<BookDto> loadDataFromUrl(String urlAddress, int rowsToOmit, boolean expectXlsx, int oldBookQuantity) {
         LOG.debug("Trying to get file from censor's site");
         URL urlObject;
         try {
@@ -86,9 +86,9 @@ public final class BookListLoader {
             LOG.info("File successfully saved, type is {}", expectXlsx ? "xlsx" : "xls");
             List<BookDto> bookDtoList;
             if (expectXlsx) {
-                bookDtoList = BookXlsMapper.parseXlsxFile(tempFile, rowsToOmit);
+                bookDtoList = BookXlsMapper.parseXlsxFile(tempFile, rowsToOmit, oldBookQuantity);
             } else {
-                bookDtoList = BookXlsMapper.parseXlsFile(tempFile, rowsToOmit);
+                bookDtoList = BookXlsMapper.parseXlsFile(tempFile, rowsToOmit, oldBookQuantity);
             }
             return bookDtoList;
         } catch (IOException e) {

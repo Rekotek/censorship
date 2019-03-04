@@ -15,7 +15,7 @@ public class BookDtoXlsMapperTest {
     public void readFromXlsFile() throws IOException {
         URL stream = BookDtoXlsMapperTest.class.getClassLoader().getResource("ExampleGoods.xls");
         File file = new File(stream.getFile());
-        List<BookDto> bookDtoList = BookXlsMapper.parseXlsFile(file, 2);
+        List<BookDto> bookDtoList = BookXlsMapper.parseXlsFile(file, 2, 30000);
         bookDtoList.forEach(System.out::println);
     }
 
@@ -23,7 +23,7 @@ public class BookDtoXlsMapperTest {
     public void readFromXlsxFile() throws IOException {
         URL stream = BookDtoXlsMapperTest.class.getClassLoader().getResource("ExampleGoods.xlsx");
         File file = new File(stream.getFile());
-        List<BookDto> bookDtoList = BookXlsMapper.parseXlsFile(file, 2);
+        List<BookDto> bookDtoList = BookXlsMapper.parseXlsFile(file, 2, 30000);
         bookDtoList.forEach(System.out::println);
     }
 }

@@ -79,8 +79,8 @@ public class BookXlsMapper {
         return bookInfoRowBuilder.build();
     }
 
-    public static List<BookDto> parseXlsxFile(File file, int rowsToOmit) throws IOException {
-        List<BookDto> resultList = new ArrayList<>(24000);
+    public static List<BookDto> parseXlsxFile(File file, int rowsToOmit, int oldBookQuantity) throws IOException {
+        List<BookDto> resultList = new ArrayList<>(oldBookQuantity + 300);
 
         try (Workbook wb = StreamingReader.builder()
                 .rowCacheSize(100)
@@ -92,8 +92,8 @@ public class BookXlsMapper {
         return resultList;
     }
 
-    public static List<BookDto> parseXlsFile(File file, int rowsToOmit) throws IOException {
-        List<BookDto> resultList = new ArrayList<>(25000);
+    public static List<BookDto> parseXlsFile(File file, int rowsToOmit, int oldBookQuantity) throws IOException {
+        List<BookDto> resultList = new ArrayList<>(oldBookQuantity + 300);
 
         try (InputStream is = new FileInputStream(file); Workbook wb = new HSSFWorkbook(is)) {
             extractData(wb, rowsToOmit, resultList);

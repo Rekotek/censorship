@@ -25,6 +25,7 @@ public final class AppSettingsService {
     private static final String APP_PROPERTIES_FILE = "app.properties";
     private static final String KEY_LAST_DOWNLOAD_TIME = "lastDownloadTime";
     private static final String KEY_LAST_FILE_SIZE = "lastFileSize";
+    private static final String KEY_LAST_QUANTITY = "lastQuantity";
     private static final String KEY_IS_XLSX = "isXlsx";
 
     private final BookRepository bookRepository;
@@ -55,6 +56,7 @@ public final class AppSettingsService {
             prop.load(fis);
             try {
                 lastSavedParams.setFileSize(Long.parseLong(prop.getProperty(KEY_LAST_FILE_SIZE, "0")));
+                lastSavedParams.setFileSize(Integer.parseInt(prop.getProperty(KEY_LAST_QUANTITY, "30000")));
                 lastSavedParams.setLastModified(LocalDateTime.parse(prop.getProperty(KEY_LAST_DOWNLOAD_TIME)));
                 lastSavedParams.setXlsx(Boolean.parseBoolean(prop.getProperty(KEY_IS_XLSX)));
             } catch (NumberFormatException e) {
@@ -65,21 +67,35 @@ public final class AppSettingsService {
         }
     }
 
-    void saveProperties(ContentParams contentParams) {
+    public void applyProperties(ContentParams contentParams) {
+        lastSavedParams.setFileSize(contentParams.getFileSize());
+        lastSavedParams.setLastModified(contentParams.getLastModified());
+        lastSavedParams.setXlsx(contentParams.isXlsx());
+        lastSavedParams.setQuantity(contentParams.getQuantity());
+        store();
+    }
+
+    private void store() {
         Properties prop = new Properties();
         try (OutputStream fos = new FileOutputStream(dbPath + File.separator + APP_PROPERTIES_FILE)) {
-            lastSavedParams.setFileSize(contentParams.getFileSize());
-            prop.setProperty(KEY_LAST_FILE_SIZE, String.valueOf(contentParams.getFileSize()));
-            lastSavedParams.setLastModified(contentParams.getLastModified());
-            prop.setProperty(KEY_LAST_DOWNLOAD_TIME, contentParams.getLastModified().format(ISO_LOCAL_DATE_TIME));
-            lastSavedParams.setXlsx(contentParams.isXlsx());
-            prop.setProperty(KEY_IS_XLSX, String.valueOf(contentParams.isXlsx()));
+            prop.setProperty(KEY_LAST_FILE_SIZE, String.valueOf(lastSavedParams.getFileSize()));
+            prop.setProperty(KEY_LAST_DOWNLOAD_TIME, lastSavedParams.getLastModified().format(ISO_LOCAL_DATE_TIME));
+            prop.setProperty(KEY_IS_XLSX, String.valueOf(lastSavedParams.isXlsx()));
+            prop.setProperty(KEY_LAST_QUANTITY, String.valueOf(lastSavedParams.getQuantity()));
             prop.store(fos, null);
         } catch (IOException e) {
             LOG.error("Cannot write properties file: {}", e.getMessage());
         }
     }
 
+    public int getLastQuantity() {
+        return lastSavedParams.getQuantity();
+    }
+
+    public void setLastQuantity(int lastQuantity) {
+        lastSavedParams.setQuantity(lastQuantity);
+        store();
+    }
     public String getLastDownloadTime() {
         return Converters.toString(lastSavedParams.getLastModified());
     }
