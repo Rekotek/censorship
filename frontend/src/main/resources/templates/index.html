@@ -37,8 +37,11 @@
         <div class="ml-4 mt-2">
             <span>Найдено книг: <strong th:text="${bookList.size()}">24</strong></span>
         </div>
-        <div class="ml-4 mt-2">
-            <a href="/download.jsp">Загрузить XLS</a>
+        <div class="ml-4">
+            <form action="/download" method="get">
+                <input type="hidden" name="searchBook" th:value="${searchBook}">
+                <input type="hidden" name="publisher" th:value="${publisher}">
+            <button type="submit"  class="btn btn-info ml-2">Загрузить XLS</button>
         </div>
     </div>
 
@@ -66,7 +69,7 @@
                 </td>
                 <td th:text="${book.yearOfPublish}" class="text-center">Dummy</td>
                 <td th:text="${#strings.abbreviate(book.publisher, 34)}">Dummy</td>
-                <td th:text="${#strings.abbreviate(#strings.substring(book.tradeCompany, 12), 35)}" class="text-center">
+                <td th:text="${#strings.abbreviate(#strings.substring(book.tradeCompany, 100), 35)}" class="text-center">
                     Dummy
                 </td>
                 <td th:text="${book.isbn}" class="text-center">Dummy</td>

@@ -24,12 +24,11 @@ public class ContentParams {
         if (o == null || getClass() != o.getClass()) return false;
         ContentParams that = (ContentParams) o;
         return fileSize == that.fileSize &&
-                xlsx == that.xlsx &&
-                quantity == that.quantity;
+                xlsx == that.xlsx;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fileSize, lastModified, quantity);
+        return Objects.hash(fileSize, lastModified);
     }
 }

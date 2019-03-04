@@ -28,13 +28,13 @@ public class BookXlsMapper {
     private static final int DOCUMENT_NUM_COLUMN = 1;
     private static final int DOCUMENT_START_DATE = 2;
     private static final int TRADE_COMPANY_COLUMN = 4;
-    private static final int RU_TITLE_COLUMN = 13;
-    private static final int ISBN_COLUMN = 14;
-    private static final int QUANTITY_COLUMN = 15;
-    private static final int AUTHOR_COLUMN = 17;
-    private static final int UA_TITLE_COLUMN = 19;
-    private static final int PUBLISHER_COLUMN = 20;
-    private static final int YEAR_COLUMN = 21;
+    private static final int RU_TITLE_COLUMN = 12;
+    private static final int ISBN_COLUMN = 13;
+    private static final int QUANTITY_COLUMN = 14;
+    private static final int AUTHOR_COLUMN = 16;
+    private static final int UA_TITLE_COLUMN = 18;
+    private static final int PUBLISHER_COLUMN = 19;
+    private static final int YEAR_COLUMN = 20;
 
     static {
         try {
@@ -80,30 +80,23 @@ public class BookXlsMapper {
     }
 
     public static List<BookDto> parseXlsxFile(File file, int rowsToOmit, int oldBookQuantity) throws IOException {
-        List<BookDto> resultList = new ArrayList<>(oldBookQuantity + 300);
-
         try (Workbook wb = StreamingReader.builder()
                 .rowCacheSize(100)
                 .bufferSize(4096)
                 .open(file)) {
-            extractData(wb, rowsToOmit, resultList);
+            return extractData(wb, rowsToOmit, oldBookQuantity);
         }
-        log.info("XLS stream was successfully parsed. Books quantity: {}", resultList.size());
-        return resultList;
     }
 
     public static List<BookDto> parseXlsFile(File file, int rowsToOmit, int oldBookQuantity) throws IOException {
-        List<BookDto> resultList = new ArrayList<>(oldBookQuantity + 300);
-
         try (InputStream is = new FileInputStream(file); Workbook wb = new HSSFWorkbook(is)) {
-            extractData(wb, rowsToOmit, resultList);
+            return extractData(wb, rowsToOmit, oldBookQuantity);
         }
 
-        log.info("XLS stream was successfully parsed. Books quantity: {}", resultList.size());
-        return resultList;
     }
 
-    private static void extractData(Workbook wb, int rowsToOmit, List<BookDto> resultList) {
+    private static List<BookDto> extractData(Workbook wb, int rowsToOmit, int oldBookQuantity) {
+        List<BookDto> resultList = new ArrayList<>(oldBookQuantity + 300);
         log.debug("Begin to parse Workbook: Number of sheets: {}", wb.getNumberOfSheets());
         Sheet sheet = wb.getSheetAt(0);
         Iterator<Row> it = sheet.iterator();
@@ -118,6 +111,8 @@ public class BookXlsMapper {
             BookInfo bookInfo = BookXlsMapper.createFromRow(row);
             resultList.add(createBookDto(bookInfo));
         }
+        log.info("Stream was successfully parsed. Books quantity: {}", resultList.size());
+        return resultList;
     }
 
     private static BookDto createBookDto(BookInfo bookInfo) {
