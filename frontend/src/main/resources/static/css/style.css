@@ -23,6 +23,10 @@ form {
     margin-top: 10px;
 }
 
-input {
-    width: 30px; !important;
+input.book-publisher {
+    width: 7rem !important;
+}
+
+input.book-title {
+    width: 16rem !important;
 }

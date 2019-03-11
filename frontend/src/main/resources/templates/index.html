@@ -17,14 +17,14 @@
     <div class="row justify-content-center">
             <form action="/" method="get">
                 <div class="form-inline">
-                        <input type="text" maxlength="80" class="form-control" id="searchBook"
+                        <input type="search" maxlength="80" class="form-control book-title" id="searchBook"
                                name="searchBook"
                                autofocus
                                placeholder="Автор/Название/ISBN"
                                th:value="${searchBook}"/>
 
                         <div class="ml-2">
-                            <input type="text" maxlength="10" class="form-control" id="publisher"
+                            <input type="search" maxlength="10" class="form-control book-publisher" id="publisher"
                                    name="publisher"
                                    placeholder="Издательство"
                                    th:width="30px"
@@ -41,7 +41,8 @@
             <form action="/download" method="get">
                 <input type="hidden" name="searchBook" th:value="${searchBook}">
                 <input type="hidden" name="publisher" th:value="${publisher}">
-            <button type="submit"  class="btn btn-info ml-2">Загрузить XLS</button>
+                <button type="submit"  class="btn btn-info ml-2">Загрузить XLS</button>
+            </form>
         </div>
     </div>
 
