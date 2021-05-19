@@ -11,14 +11,14 @@
         <expiry>
             <ttl unit="minutes">5</ttl>
         </expiry>
-        <heap unit="entries">5000</heap>
+        <heap>5</heap>
     </cache-template>
 
     <cache-template name="singleNonExpiryCache">
         <expiry>
             <none/>
         </expiry>
-        <heap>20</heap>
+        <heap>5</heap>
     </cache-template>
 
     <cache alias="books" uses-template="singleNonExpiryCache"/>

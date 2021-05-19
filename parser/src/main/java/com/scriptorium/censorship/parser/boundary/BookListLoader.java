@@ -43,6 +43,7 @@ public final class BookListLoader {
 
             ContentParamsBuilder contentParamsBuilder = ContentParams.builder();
             String contentName = urlConnection.getHeaderField("Content-Disposition");
+
             if (contentName.endsWith("xlsx")) {
                 LOG.debug("Source file is 'xlsx'");
                 contentParamsBuilder.xlsx(true);
@@ -83,6 +84,7 @@ public final class BookListLoader {
         try {
             tempFile = File.createTempFile("loadedGoods-", "-tmp");
             FileUtils.copyURLToFile(urlObject, tempFile, 5000, 120000);
+
             LOG.info("File successfully saved, type is {}", expectXlsx ? "xlsx" : "xls");
             List<BookDto> bookDtoList;
             if (expectXlsx) {
