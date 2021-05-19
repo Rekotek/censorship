@@ -11,4 +11,5 @@ RUN apk --update add --no-cache tomcat-native=1.2.21-r1
 COPY censorship-app.jar censorship-app.jar
 
 # https://blog.longyb.com/2019/06/09/tomcat_hang_creation_of_securerandom_instance_for_sessionid_english/
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Dspring.jmx.enabled=false", "-jar", "censorship-app.jar"]
+# https://stackoverflow.com/questions/6110395/sqlrecoverableexception-i-o-exception-connection-reset
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Dspring.jmx.enabled=false", "-Dsecurerandom.source=file:/dev/./urandom", "-jar", "censorship-app.jar"]
