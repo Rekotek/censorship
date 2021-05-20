@@ -25,7 +25,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public final class BookListLoader {
     private static final Logger LOG = getLogger(BookListLoader.class);
 
-    private static final int ROWS_TO_OMIT = 2;
+    private static final int STARTING_ROW = 1;
 
     private BookListLoader() {
     }
@@ -67,10 +67,10 @@ public final class BookListLoader {
     }
 
     public static List<BookDto> loadDataFromUrl(String urlAddress, boolean expectXlsx, int oldBookQuantity) {
-        return loadDataFromUrl(urlAddress, ROWS_TO_OMIT, expectXlsx, oldBookQuantity);
+        return loadDataFromUrl(urlAddress, STARTING_ROW, expectXlsx, oldBookQuantity);
     }
 
-    public static List<BookDto> loadDataFromUrl(String urlAddress, int rowsToOmit, boolean expectXlsx, int oldBookQuantity) {
+    public static List<BookDto> loadDataFromUrl(String urlAddress, int startingRow, boolean expectXlsx, int oldBookQuantity) {
         LOG.debug("Trying to get file from censor's site");
         URL urlObject;
         try {
@@ -88,9 +88,9 @@ public final class BookListLoader {
             LOG.info("File successfully saved, type is {}", expectXlsx ? "xlsx" : "xls");
             List<BookDto> bookDtoList;
             if (expectXlsx) {
-                bookDtoList = BookXlsMapper.parseXlsxFile(tempFile, rowsToOmit, oldBookQuantity);
+                bookDtoList = BookXlsMapper.parseXlsxFile(tempFile, startingRow, oldBookQuantity);
             } else {
-                bookDtoList = BookXlsMapper.parseXlsFile(tempFile, rowsToOmit, oldBookQuantity);
+                bookDtoList = BookXlsMapper.parseXlsFile(tempFile, startingRow, oldBookQuantity);
             }
             return bookDtoList;
         } catch (IOException e) {

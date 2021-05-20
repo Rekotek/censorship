@@ -79,30 +79,30 @@ public class BookXlsMapper {
         return bookInfoRowBuilder.build();
     }
 
-    public static List<BookDto> parseXlsxFile(File file, int rowsToOmit, int oldBookQuantity) throws IOException {
+    public static List<BookDto> parseXlsxFile(File file, int startingRow, int oldBookQuantity) throws IOException {
         try (Workbook wb = StreamingReader.builder()
                 .rowCacheSize(100)
                 .bufferSize(4096)
                 .open(file)) {
-            return extractData(wb, rowsToOmit, oldBookQuantity);
+            return extractData(wb, startingRow, oldBookQuantity);
         }
     }
 
-    public static List<BookDto> parseXlsFile(File file, int rowsToOmit, int oldBookQuantity) throws IOException {
+    public static List<BookDto> parseXlsFile(File file, int startingRow, int oldBookQuantity) throws IOException {
         try (InputStream is = new FileInputStream(file); Workbook wb = new HSSFWorkbook(is)) {
-            return extractData(wb, rowsToOmit, oldBookQuantity);
+            return extractData(wb, startingRow, oldBookQuantity);
         }
 
     }
 
-    private static List<BookDto> extractData(Workbook wb, int rowsToOmit, int oldBookQuantity) {
+    private static List<BookDto> extractData(Workbook wb, int startingRow, int oldBookQuantity) {
         List<BookDto> resultList = new ArrayList<>(oldBookQuantity + 300);
         log.debug("Begin to parse Workbook: Number of sheets: {}", wb.getNumberOfSheets());
         Sheet sheet = wb.getSheetAt(0);
         Iterator<Row> it = sheet.iterator();
         while (it.hasNext()) {
             Row row = it.next();
-            if (row.getRowNum() == rowsToOmit) {
+            if (row.getRowNum() == startingRow) {
                 break;
             }
         }
