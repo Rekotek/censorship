@@ -2,6 +2,7 @@ package com.scriptorium.censorship.frontend.service;
 
 import com.scriptorium.censorship.common.model.BookDto;
 import com.scriptorium.censorship.common.model.ContentParams;
+import com.scriptorium.censorship.common.util.Converters;
 import com.scriptorium.censorship.frontend.entity.Book;
 import com.scriptorium.censorship.frontend.exception.CensorSiteNotWorkingException;
 import com.scriptorium.censorship.frontend.repository.BookRepository;
@@ -13,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.scriptorium.censorship.parser.boundary.BookListLoader.loadContentParams;
@@ -33,6 +35,8 @@ public class BookService {
     @Value("${censorship.url}")
     private String urlAddress;
 
+    private String targetWord = "РЕЄСТР";
+
     public BookService(BookRepository bookRepository, AppSettingsService settingsService, CacheManager cacheManager) {
         this.bookRepository = bookRepository;
         this.settingsService = settingsService;
@@ -51,14 +55,26 @@ public class BookService {
     public void fillDatabase() throws CensorSiteNotWorkingException {
         LOG.info(">>> Run fillDatabase() >>>");
 
-        ContentParams newContentParams = loadContentParams(urlAddress);
+        String urlTarget;
+        try {
+            urlTarget = Converters.extractTargetFromUrl(urlAddress, targetWord);
+        } catch (IOException e) {
+            LOG.error("Can not load html from given url");
+            return;
+        }
+        if (urlTarget == null) {
+            LOG.error("Can not parse html");
+            return;
+        }
+
+        ContentParams newContentParams = loadContentParams(urlTarget);
         long newFileSize = newContentParams.getFileSize();
         if (newFileSize == 0) {
             LOG.error("Cannot load file.");
             throw new CensorSiteNotWorkingException("Файл загрузился с нулевой длиной");
         }
         if (settingsService.shouldReloadData(newContentParams)) {
-            final List<BookDto> bookDtoList = BookListLoader.loadDataFromUrl(urlAddress, newContentParams.isXlsx(), settingsService.getLastQuantity());
+            final List<BookDto> bookDtoList = BookListLoader.loadDataFromUrl(urlTarget, newContentParams.isXlsx(), settingsService.getLastQuantity());
             final List<Book> books = bookDtoList.stream().map(this::createBookEntity).collect(toList());
             LOG.info("Converted {} books into entities", books.size());
             newContentParams.setQuantity(books.size());

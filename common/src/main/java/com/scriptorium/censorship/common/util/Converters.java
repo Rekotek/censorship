@@ -1,5 +1,11 @@
 package com.scriptorium.censorship.common.util;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -30,4 +36,14 @@ public final class Converters {
         return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
     }
 
+    public static String extractTargetFromUrl(String urlSource, String wordInsideTarget) throws IOException {
+        Document doc = Jsoup.connect(urlSource).get();
+        Elements links = doc.select("a[href]");
+        for (Element element : links) {
+            Element anchor = element.getElementsContainingText(wordInsideTarget).first();
+            if (anchor != null)
+                return anchor.attr("href");
+        }
+        return null;
+    }
 }
