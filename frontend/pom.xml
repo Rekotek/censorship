@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>frontend</artifactId>
-    <version>1.6</version>
+    <version>1.7</version>
     <packaging>jar</packaging>
 
     <name>Frontend</name>
@@ -29,12 +29,12 @@
         <dependency>
             <groupId>com.scriptorium.censorship</groupId>
             <artifactId>parser</artifactId>
-            <version>1.7</version>
+            <version>1.8</version>
         </dependency>
         <dependency>
             <groupId>com.scriptorium.censorship</groupId>
             <artifactId>common</artifactId>
-            <version>1.4</version>
+            <version>1.5</version>
         </dependency>
 
         <dependency>

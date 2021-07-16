@@ -13,5 +13,6 @@ public class ConvertersTest extends TestCase {
         String url = Converters.extractTargetFromUrl(testHtml, keyWord);
         Assert.assertNotNull(url);
         Assert.assertTrue(url.contains("Goods"));
+        System.out.printf("url = %s", url);
     }
 }

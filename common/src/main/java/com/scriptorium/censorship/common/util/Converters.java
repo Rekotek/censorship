@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -37,7 +38,8 @@ public final class Converters {
     }
 
     public static String extractTargetFromUrl(String urlSource, String wordInsideTarget) throws IOException {
-        Document doc = Jsoup.connect(urlSource).get();
+//        Document doc = Jsoup.connect(urlSource).get();
+        Document doc = Jsoup.parse( new URL(urlSource).openStream(), "windows-1251", urlSource);
         Elements links = doc.select("a[href]");
         for (Element element : links) {
             Element anchor = element.getElementsContainingText(wordInsideTarget).first();
