@@ -71,9 +71,10 @@ public class BookXlsMapper {
                     } catch (IllegalArgumentException ignored) {
                         log.error("Illegal Argument Exception. Row = {}; Col = {}; Cell Value = {}", row.getRowNum(), col, cell);
                         method.invoke(bookInfoRowBuilder, "");
-                    }
+                     }
                 }
             } catch (IllegalAccessException | InvocationTargetException ignored) {
+                log.error(ignored.getMessage());
             }
         });
         return bookInfoRowBuilder.build();

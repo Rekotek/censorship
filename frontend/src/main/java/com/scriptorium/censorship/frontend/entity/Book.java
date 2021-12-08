@@ -17,7 +17,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class Book {
-    public static final int MAX_VARCHAR = 1024;
+    public static final int MAX_VARCHAR = 4096;
     @Id
     @GeneratedValue
     private Long id;
