@@ -19,8 +19,8 @@ $(function () {
         },
         "order": [
             [
-                0,
-                "asc"
+                6,
+                "desc"
             ]
         ]
     });
