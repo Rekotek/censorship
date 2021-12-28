@@ -18,7 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import static com.scriptorium.censorship.common.util.Converters.toInt;
+import static com.scriptorium.censorship.common.util.ConvertersUtil.toInt;
 
 public class BookXlsMapper {
     private static final Logger log = LoggerFactory.getLogger(BookXlsMapper.class);
@@ -73,8 +73,8 @@ public class BookXlsMapper {
                         method.invoke(bookInfoRowBuilder, "");
                      }
                 }
-            } catch (IllegalAccessException | InvocationTargetException ignored) {
-                log.error(ignored.getMessage());
+            } catch (IllegalAccessException | InvocationTargetException ex) {
+                log.error(ex.getMessage());
             }
         });
         return bookInfoRowBuilder.build();

@@ -31,14 +31,14 @@ public class DownloadController extends BaseController {
 
     @GetMapping(value = "/download", produces = "application/vnd.ms-excel")
     @ResponseBody
-    public void getXls(@RequestParam(value = "searchBook", required = false) String searchBook,
-                       @RequestParam(value = "publisher", required = false) String publisher,
+    public void getXls(@RequestParam(value = "searchBook", required = false) String requestBook,
+                       @RequestParam(value = "publisher", required = false) String requestPublisher,
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException {
-        LOG.debug("From <{}> with '{}', publisher '{}'", request.getRemoteAddr(), searchBook, publisher);
+        LOG.debug("From <{}> with '{}', publisher '{}'", request.getRemoteAddr(), requestBook, requestPublisher);
 
-        publisher = constructPublisher(searchBook, publisher);
-        List<Book> bookList = retrieveBookList(searchBook, publisher);
+        var publisher = constructPublisher(requestBook, requestPublisher);
+        List<Book> bookList = retrieveBookList(requestBook, publisher);
         response.setHeader("Content-Disposition","attachment; filename=Book.xlsx");
 
         ByteArrayOutputStream workbookStream = excelCreatorService.buildWorkbook(bookList);

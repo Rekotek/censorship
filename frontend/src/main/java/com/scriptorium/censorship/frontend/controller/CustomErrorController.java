@@ -11,17 +11,15 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @Controller
 public class CustomErrorController implements ErrorController {
-    private static final String ERROR_PATH = "/error";
     private static final Logger log = getLogger(CustomErrorController.class);
 
-    @RequestMapping(value = ERROR_PATH)
+    @RequestMapping("${server.error.path}")
     public String redirectErrors(HttpServletRequest request) {
         log.warn("Incorrect request from <{}> for {}", request.getRemoteAddr(), request.getRequestURI());
         return "redirect:/";
     }
 
-    @Override
     public String getErrorPath() {
-        return ERROR_PATH;
+        return null;
     }
 }

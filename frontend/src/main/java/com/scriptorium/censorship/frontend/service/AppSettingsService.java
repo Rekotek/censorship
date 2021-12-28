@@ -1,7 +1,7 @@
 package com.scriptorium.censorship.frontend.service;
 
 import com.scriptorium.censorship.common.model.ContentParams;
-import com.scriptorium.censorship.common.util.Converters;
+import com.scriptorium.censorship.common.util.ConvertersUtil;
 import com.scriptorium.censorship.frontend.repository.BookRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,15 +29,16 @@ public final class AppSettingsService {
     private static final String KEY_IS_XLSX = "isXlsx";
 
     private final BookRepository bookRepository;
+    private final ContentParams lastSavedParams = new ContentParams();
+
+    @Value("${censorship.db-dir}")
+    private String dbPath;
+
 
     public AppSettingsService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
-    @Value("${censorship.db-dir}")
-    private String dbPath;
-
-    private ContentParams lastSavedParams = new ContentParams();
 
     public boolean isNewDatabase() {
         long recordQuantity = bookRepository.count();
@@ -97,6 +98,6 @@ public final class AppSettingsService {
         store();
     }
     public String getLastDownloadTime() {
-        return Converters.toString(lastSavedParams.getLastModified());
+        return ConvertersUtil.toString(lastSavedParams.getLastModified());
     }
 }

@@ -16,10 +16,8 @@ public class LogReaderService {
     @Value("${CENSOR_APP_ROOT}/log/censorship.log")
     private String logFile;
 
-    public List<String> tailLog(int linesToShow) {
-        if (linesToShow > MAX_LINES) {
-            linesToShow = MAX_LINES;
-        }
+    public List<String> tailLog(int lines) {
+        int linesToShow = Math.min(lines, MAX_LINES);
         List<String> resultList = new ArrayList<>(linesToShow);
         File file = new File(logFile);
         try {

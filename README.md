@@ -1,3 +1,5 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/95df55abcc48494795a01211617c8900)](https://www.codacy.com/gh/Rekotek/censorship/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Rekotek/censorship&amp;utm_campaign=Badge_Grade)
+
 Censorship rules the world! :)
 ==============================
 

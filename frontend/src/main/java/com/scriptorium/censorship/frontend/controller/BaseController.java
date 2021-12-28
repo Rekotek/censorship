@@ -24,8 +24,8 @@ public class BaseController {
     }
 
     protected String constructPublisher(String searchBook, String publisher) {
-        if (StringUtils.isBlank(publisher) & (StringUtils.isBlank(searchBook))) {
-            publisher = "СОФИЯ";
+        if (StringUtils.isBlank(publisher) && (StringUtils.isBlank(searchBook))) {
+            return "СОФИЯ";
         }
         return publisher;
     }

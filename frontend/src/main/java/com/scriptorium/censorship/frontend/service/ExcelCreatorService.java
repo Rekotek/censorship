@@ -16,13 +16,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class ExcelCreatorService {
     private static final Logger LOG = getLogger(ExcelCreatorService.class);
 
-    private final BookService bookService;
     private final static String[] columns = {"Автор", "Название", "ISBN", "Год", "№ разр.", "Дата разрешения", "Количество"};
-
-    public ExcelCreatorService(BookService bookService) {
-        this.bookService = bookService;
-    }
-
 
     public ByteArrayOutputStream buildWorkbook(List<Book> bookList) {
         Workbook workbook = new XSSFWorkbook();
@@ -67,26 +61,21 @@ public class ExcelCreatorService {
             Row row = sheet.createRow(rowNum++);
             cell = row.createCell(0);
             cell.setCellValue(book.getAuthor());
-            cell.setCellType(CellType.STRING);
 
             cell = row.createCell(1);
             cell.setCellValue(book.getRuTitle());
-            cell.setCellType(CellType.STRING);
 
             cell = row.createCell(2);
             cell.setCellValue(book.getIsbn());
-            cell.setCellType(CellType.STRING);
             cell.setCellStyle(centeredCellStyle);
 
             cell = row.createCell(3);
             cell.setCellValue(book.getYearOfPublish());
-            cell.setCellType(CellType.NUMERIC);
             cell.setCellStyle(yearCellStyle);
 
             cell = row.createCell(4);
             cell.setCellValue(book.getDocumentNum());
             cell.setCellStyle(centeredCellStyle);
-            cell.setCellType(CellType.STRING);
 
             cell = row.createCell(5);
             cell.setCellValue(book.getDocumentDate());
@@ -94,7 +83,6 @@ public class ExcelCreatorService {
 
             cell = row.createCell(6);
             cell.setCellValue(book.getQuantity());
-            cell.setCellType(CellType.NUMERIC);
             cell.setCellStyle(centeredCellStyle);
         }
 

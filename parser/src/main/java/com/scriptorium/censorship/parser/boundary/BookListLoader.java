@@ -97,12 +97,9 @@ public final class BookListLoader {
             LOG.error("Error loading or parsing file: {}", e.getMessage());
             return Collections.emptyList();
         } finally {
-            if (tempFile != null) {
-                if (!tempFile.delete()) {
-                    LOG.error("Cannot delete temporary file!");
-                }
+            if ((tempFile != null) && !tempFile.delete()) {
+                LOG.error("Cannot delete temporary file!");
             }
         }
-
     }
 }

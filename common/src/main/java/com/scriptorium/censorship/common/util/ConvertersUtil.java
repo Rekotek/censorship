@@ -17,11 +17,11 @@ import static java.lang.Integer.parseInt;
  * Created by taras on 2018-11-12.
  */
 
-public final class Converters {
+public final class ConvertersUtil {
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("d MMM yyyy HH:mm", new Locale("ru"));
 
-    private Converters() { }
+    private ConvertersUtil() { }
 
     public static int toInt(String s) {
         int result;
@@ -38,7 +38,6 @@ public final class Converters {
     }
 
     public static String extractTargetFromUrl(String urlSource, String wordInsideTarget) throws IOException {
-//        Document doc = Jsoup.connect(urlSource).get();
         Document doc = Jsoup.parse( new URL(urlSource).openStream(), "windows-1251", urlSource);
         Elements links = doc.select("a[href]");
         for (Element element : links) {

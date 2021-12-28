@@ -2,7 +2,7 @@ package com.scriptorium.censorship.frontend.service;
 
 import com.scriptorium.censorship.common.model.BookDto;
 import com.scriptorium.censorship.common.model.ContentParams;
-import com.scriptorium.censorship.common.util.Converters;
+import com.scriptorium.censorship.common.util.ConvertersUtil;
 import com.scriptorium.censorship.frontend.entity.Book;
 import com.scriptorium.censorship.frontend.exception.CensorSiteNotWorkingException;
 import com.scriptorium.censorship.frontend.repository.BookRepository;
@@ -28,14 +28,14 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class BookService {
     private static final Logger LOG = getLogger(BookService.class);
 
+    private final String TARGET_WORD = "РЕЄСТР";
+
     private final BookRepository bookRepository;
     private final AppSettingsService settingsService;
     private final CacheManager cacheManager;
 
     @Value("${censorship.url}")
     private String urlAddress;
-
-    private String targetWord = "РЕЄСТР";
 
     public BookService(BookRepository bookRepository, AppSettingsService settingsService, CacheManager cacheManager) {
         this.bookRepository = bookRepository;
@@ -44,7 +44,7 @@ public class BookService {
     }
 
     private String prepareForSql(String in) {
-        return (StringUtils.isEmpty(in)) ? "%" :
+        return (!StringUtils.hasLength(in)) ? "%" :
                 "%" + in
                 .replaceAll("\\s{2,}", " ")
                 .replace(" ", "%")
@@ -57,7 +57,7 @@ public class BookService {
 
         String urlTarget;
         try {
-            urlTarget = Converters.extractTargetFromUrl(urlAddress, targetWord);
+            urlTarget = ConvertersUtil.extractTargetFromUrl(urlAddress, TARGET_WORD);
         } catch (IOException e) {
             LOG.error("Can not load html from given url");
             return;

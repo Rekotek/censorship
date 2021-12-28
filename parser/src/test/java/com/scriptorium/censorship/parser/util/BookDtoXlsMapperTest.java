@@ -1,6 +1,7 @@
 package com.scriptorium.censorship.parser.util;
 
 import com.scriptorium.censorship.common.model.BookDto;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -17,6 +18,7 @@ public class BookDtoXlsMapperTest {
         File file = new File(stream.getFile());
         List<BookDto> bookDtoList = BookXlsMapper.parseXlsFile(file, 2, 30000);
         bookDtoList.forEach(System.out::println);
+        Assert.assertTrue(bookDtoList.size() > 0);
     }
 
     @Test
@@ -25,5 +27,6 @@ public class BookDtoXlsMapperTest {
         File file = new File(stream.getFile());
         List<BookDto> bookDtoList = BookXlsMapper.parseXlsxFile(file, 2, 30000);
         bookDtoList.forEach(System.out::println);
+        Assert.assertTrue(bookDtoList.size() > 0);
     }
 }
