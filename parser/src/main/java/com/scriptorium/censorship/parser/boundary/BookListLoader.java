@@ -86,7 +86,7 @@ public final class BookListLoader {
             FileUtils.copyURLToFile(urlObject, tempFile, 5000, 120000);
 
             LOG.info("File successfully saved, type is {}", expectXlsx ? "xlsx" : "xls");
-            List<BookDto> bookDtoList;
+            final List<BookDto> bookDtoList;
             if (expectXlsx) {
                 bookDtoList = BookXlsMapper.parseXlsxFile(tempFile, startingRow, oldBookQuantity);
             } else {

@@ -97,7 +97,7 @@ public class BookXlsMapper {
     }
 
     private static List<BookDto> extractData(Workbook wb, int startingRow, int oldBookQuantity) {
-        List<BookDto> resultList = new ArrayList<>(oldBookQuantity + 300);
+        final List<BookDto> resultList = new ArrayList<>(oldBookQuantity + 300);
         log.debug("Begin to parse Workbook: Number of sheets: {}", wb.getNumberOfSheets());
         Sheet sheet = wb.getSheetAt(0);
         Iterator<Row> it = sheet.iterator();

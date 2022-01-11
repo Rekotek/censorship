@@ -19,7 +19,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @SpringBootApplication
 @EnableScheduling
-@EnableCaching
 public class MainApplication implements CommandLineRunner {
     private static final Logger LOG = getLogger(MainApplication.class);
 

@@ -9,8 +9,6 @@ import com.scriptorium.censorship.frontend.repository.BookRepository;
 import com.scriptorium.censorship.parser.boundary.BookListLoader;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -28,19 +26,15 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class BookService {
     private static final Logger LOG = getLogger(BookService.class);
 
-    private final String TARGET_WORD = "РЕЄСТР";
-
     private final BookRepository bookRepository;
     private final AppSettingsService settingsService;
-    private final CacheManager cacheManager;
 
     @Value("${censorship.url}")
     private String urlAddress;
 
-    public BookService(BookRepository bookRepository, AppSettingsService settingsService, CacheManager cacheManager) {
+    public BookService(BookRepository bookRepository, AppSettingsService settingsService) {
         this.bookRepository = bookRepository;
         this.settingsService = settingsService;
-        this.cacheManager = cacheManager;
     }
 
     private String prepareForSql(String in) {
@@ -57,6 +51,7 @@ public class BookService {
 
         String urlTarget;
         try {
+            String TARGET_WORD = "РЕЄСТР";
             urlTarget = ConvertersUtil.extractTargetFromUrl(urlAddress, TARGET_WORD);
         } catch (IOException e) {
             LOG.error("Can not load html from given url");
@@ -78,10 +73,10 @@ public class BookService {
             final List<Book> books = bookDtoList.stream().map(this::createBookEntity).collect(toList());
             LOG.info("Converted {} books into entities", books.size());
             newContentParams.setQuantity(books.size());
-            cacheManager.getCache("books").clear();
             bookRepository.deleteAll();
             bookRepository.saveAll(books);
             settingsService.applyProperties(newContentParams);
+            System.gc();
         }
     }
 
@@ -101,7 +96,6 @@ public class BookService {
         return bookList;
     }
 
-    @Cacheable(value = "books", key = "{#title, #publisher}")
     public List<Book> searchBookByTitleAndPublisher(String title, String publisher) {
         String parsedTitle = prepareForSql(title);
         String preparedPublisher = prepareForSql(publisher);

@@ -1,7 +1,9 @@
 package com.scriptorium.censorship.frontend.entity;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +16,8 @@ import java.util.Date;
  */
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Book {
     public static final int MAX_VARCHAR = 4096;
