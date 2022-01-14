@@ -41,12 +41,12 @@ public class IndexController extends BaseController {
 
     @GetMapping("/")
     public String searchBook(@RequestParam(value = "searchBook", required = false, defaultValue = "") String searchBook,
-                             @RequestParam(value = "publisher", required = false) String publisher,
+                             @RequestParam(value = "publisher", required = false) String pbl,
                              HttpServletRequest request,
                              Model model) {
-        LOG.debug("From <{}> with '{}', publisher '{}'", request.getRemoteAddr(), searchBook, publisher);
+        LOG.debug("From <{}> with '{}', publisher '{}'", request.getRemoteAddr(), searchBook, pbl);
 
-        publisher = constructPublisher(searchBook, publisher);
+        var publisher = constructPublisher(searchBook, pbl);
         List<Book> bookList = retrieveBookList(searchBook, publisher);
 
         fillBaseAttributes(model, bookList);

@@ -1,6 +1,5 @@
 package com.scriptorium.censorship.frontend.entity;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
